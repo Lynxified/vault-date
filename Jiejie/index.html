@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enter Code</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0f172a;
+      color: #e5e7eb;
+      overflow: hidden;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 320px;
+      padding: 20px;
+      text-align: center;
+    }
+
+
+    input {
+      width: 100%;
+      padding: 14px;
+      font-size: 1.2rem;
+      text-align: center;
+      border-radius: 8px;
+      border: none;
+      margin-bottom: 16px;
+      background: #020617;
+      color: #e5e7eb;
+      letter-spacing: 4px;
+    }
+
+    input:focus {
+      outline: none;
+    }
+
+    .numpad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    button {
+      padding: 16px;
+      font-size: 1.1rem;
+      border-radius: 10px;
+      border: none;
+      background: #1e293b;
+      color: #e5e7eb;
+      cursor: pointer;
+    }
+
+    button:active {
+      background: #334155;
+    }
+
+    .wide {
+      grid-column: span 2;
+    }
+    .bg {
+      background: url(images/background.png) no-repeat;
+      background-size: cover;
+      height: 100%;
+      width: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -3;
+    }
+    .bg:before {
+      content: "";
+      width: 100%;
+      height: 100%;
+      background: #000;
+      position: fixed;
+      z-index: -1;
+      top: 0;
+      left: 0;
+      opacity: 0.3;
+    }
+    @keyframes sf-fly-by-1 {
+      from {
+        transform: translateZ(-600px);
+        opacity: 0.5;
+      }
+      to {
+        transform: translateZ(0);
+        opacity: 0.5;
+      }
+    }
+    @keyframes sf-fly-by-2 {
+      from {
+        transform: translateZ(-1200px);
+        opacity: 0.5;
+      }
+      to {
+        transform: translateZ(-600px);
+        opacity: 0.5;
+      }
+    }
+    @keyframes sf-fly-by-3 {
+      from {
+        transform: translateZ(-1800px);
+        opacity: 0.5;
+      }
+      to {
+        transform: translateZ(-1200px);
+        opacity: 0.5;
+      }
+    }
+    .star-field {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      perspective: 600px;
+      -webkit-perspective: 600px;
+      z-index: -1;
+    }
+    .star-field .layer {
+      box-shadow: -411px -476px #cccccc, 777px -407px #d4d4d4, -387px -477px #fcfcfc, -91px -235px #d4d4d4, 491px -460px #f7f7f7, 892px -128px #f7f7f7, 758px -277px #ededed, 596px 378px #cccccc, 647px 423px whitesmoke, 183px 389px #c7c7c7,
+          524px -237px #f0f0f0, 679px -535px #e3e3e3, 158px 399px #ededed, 157px 249px #ededed, 81px -450px #ebebeb, 719px -360px #c2c2c2, -499px 473px #e8e8e8, -158px -349px #d4d4d4, 870px -134px #cfcfcf, 446px 404px #c2c2c2,
+          440px 490px #d4d4d4, 414px 507px #e6e6e6, -12px 246px #fcfcfc, -384px 369px #e3e3e3, 641px -413px #fcfcfc, 822px 516px #dbdbdb, 449px 132px #c2c2c2, 727px 146px #f7f7f7, -315px -488px #e6e6e6, 952px -70px #e3e3e3,
+          -869px -29px #dbdbdb, 502px 80px #dedede, 764px 342px #e0e0e0, -150px -380px #dbdbdb, 654px -426px #e3e3e3, -325px -263px #c2c2c2, 755px -447px #c7c7c7, 729px -177px #c2c2c2, -682px -391px #e6e6e6, 554px -176px #ededed,
+          -85px -428px #d9d9d9, 714px 55px #e8e8e8, 359px -285px #cfcfcf, -362px -508px #dedede, 468px -265px #fcfcfc, 74px -500px #c7c7c7, -514px 383px #dbdbdb, 730px -92px #cfcfcf, -112px 287px #c9c9c9, -853px 79px #d6d6d6,
+          828px 475px #d6d6d6, -681px 13px #fafafa, -176px 209px #f0f0f0, 758px 457px #fafafa, -383px -454px #ededed, 813px 179px #d1d1d1, 608px 98px whitesmoke, -860px -65px #c4c4c4, -572px 272px #f7f7f7, 459px 533px #fcfcfc,
+          624px -481px #e6e6e6, 790px 477px #dedede, 731px -403px #ededed, 70px -534px #cccccc, -23px 510px #cfcfcf, -652px -237px whitesmoke, -690px 367px #d1d1d1, 810px 536px #d1d1d1, 774px 293px #c9c9c9, -362px 97px #c2c2c2,
+          563px 47px #dedede, 313px 475px #e0e0e0, 839px -491px #e3e3e3, -217px 377px #d4d4d4, -581px 239px #c2c2c2, -857px 72px #cccccc, -23px 340px #dedede, -837px 246px white, 170px -502px #cfcfcf, 822px -443px #e0e0e0, 795px 497px #e0e0e0,
+          -814px -337px #cfcfcf, 206px -339px #f2f2f2, -779px 108px #e6e6e6, 808px 2px #d4d4d4, 665px 41px #d4d4d4, -564px 64px #cccccc, -380px 74px #cfcfcf, -369px -60px #f7f7f7, 47px -495px #e3e3e3, -383px 368px #f7f7f7, 419px 288px #d1d1d1,
+          -598px -50px #c2c2c2, -833px 187px #c4c4c4, 378px 325px whitesmoke, -703px 375px #d6d6d6, 392px 520px #d9d9d9, -492px -60px #c4c4c4, 759px 288px #ebebeb, 98px -412px #c4c4c4, -911px -277px #c9c9c9;
+      transform-style: preserve-3d;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      height: 4px;
+      width: 4px;
+      border-radius: 2px;
+    }
+    .star-field .layer:nth-child(1) {
+      animation: sf-fly-by-1 5s linear infinite;
+    }
+    .star-field .layer:nth-child(2) {
+      animation: sf-fly-by-2 5s linear infinite;
+    }
+    .star-field .layer:nth-child(3) {
+      animation: sf-fly-by-3 5s linear infinite;
+    }
+    .popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+
+    .popup.hidden {
+      display: none;
+    }
+
+    .popup-content {
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      width: 260px;
+      box-shadow: 0 0 20px rgba(255, 182, 193, 0.8);
+      animation: popIn 0.3s ease;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .popup-content p {
+      margin: 12px 0;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .cat-gif {
+      width: 150px;
+      border-radius: 10px;
+      image-rendering: pixelated;
+    }
+
+    .popup-content button {
+      background: #ff8fb1;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 20px;
+      color: white;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .popup-content button:hover {
+      background: #ff6f9f;
+    }
+
+    @keyframes popIn {
+      from {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    .cursor{
+        cursor: default;
+    }
+
+    @keyframes fall {
+      to {
+        top: 110vh;
+        transform: translateX(50px) rotate(720deg);
+      }
+    }
+
+    .falling-cats {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .card-slider {
+      position: relative;
+      width: 100%;
+      min-height: 280px;
+    }
+
+    .cards-container {
+      position: relative;
+      width: 100%;
+      height: 280px;
+      perspective: 1000px;
+    }
+
+    .message-card {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      transform-origin: center;
+    }
+
+    .message-card.active {
+      transform: translateX(0) translateY(0) scale(1) rotateY(0deg);
+      opacity: 1;
+      z-index: 3;
+    }
+
+    .message-card.prev {
+      transform: translateX(-120%) translateY(20px) scale(0.85) rotateY(15deg);
+      opacity: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .message-card.next {
+      transform: translateX(120%) translateY(20px) scale(0.85) rotateY(-15deg);
+      opacity: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .card-content {
+      background: linear-gradient(135deg, rgba(236, 72, 153, 0.3), rgba(168, 85, 247, 0.3));
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 24px;
+      height: 100%;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 32px rgba(236, 72, 153, 0.3);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+
+    .card-number {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      font-size: 12px;
+      color: #fbbf24;
+      font-weight: bold;
+      opacity: 0.8;
+    }
+
+    .card-content p {
+      color: #f3f4f6;
+      line-height: 1.7;
+      font-size: 15px;
+      text-align: center;
+      margin: 0;
+    }
+
+    .slider-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .slider-btn {
+      background: rgba(236, 72, 153, 0.4);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.3s;
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+
+    .slider-btn:hover:not(:disabled) {
+      background: rgba(236, 72, 153, 0.6);
+      transform: scale(1.1);
+    }
+
+    .slider-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .slider-btn:active:not(:disabled) {
+      background: rgba(236, 72, 153, 0.8);
+    }
+
+    .dots-container {
+      display: flex;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .dot.active {
+      background: #fbbf24;
+      transform: scale(1.3);
+    }
+
+    .dot:hover {
+      background: rgba(251, 191, 36, 0.6);
+    }
+
+    /* Fireworks Canvas */
+    #fireworks {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10000;
+    }
+    .glow {
+  color: #fff;
+  text-align: center;
+  padding-bottom: 10px;
+    font-size: 0.95rem;
+    opacity: 0.8;
+    font-family: cursive;
+    margin-bottom: 14px;
+    animation: glow 1s ease-in-out infinite alternate;
+}
+
+@keyframes glow{
+  from{text-shadow:0px 0px 5px #fff,0px 0px 5px #614ad3;}
+  to{text-shadow:0px 0px 20px #fff,0px 0px 20px #614ad3;}
+}
+  </style>
+</head>
+<body>
+  <canvas id="fireworks"></canvas>
+  
+  <div class="container">
+    <div class="bg"></div>
+    
+    <!-- Cute Wrong Answer Popup -->
+    <div id="cute-popup" class="popup hidden">
+      <div class="popup-content">
+        <img
+          src="/gifs/holdap.gif"
+          alt="cutiepie"
+          class="cat-gif"
+        />
+        <p>Oopsie whiskers! 🌸<br>That's not the magic number yet~</p>
+        <button onclick="closePopup()">Try again 💖</button>
+      </div>
+    </div>
+    <div class="hint">
+        <h2 class="glow">Some moments don’t need words — just a date worth remembering.</h2>
+    </div>
+
+    <input type="text" class="cursor" id="display" readonly placeholder="••••••" />
+
+    <div class="numpad">
+       
+      <button onclick="press('1')">𝟭</button>
+      <button onclick="press('2')">𝟮</button>
+      <button onclick="press('3')">𝟯</button>
+      <button onclick="press('4')">𝟰</button>
+      <button onclick="press('5')">𝟱</button>
+      <button onclick="press('6')">𝟲</button>
+      <button onclick="press('7')">𝟳</button>
+      <button onclick="press('8')">𝟴</button>
+      <button onclick="press('9')">𝟵</button>
+      <button onclick="clearInput()">⌫</button>
+      <button onclick="press('0')">𝟬</button>
+      <button onclick="submit()">↵</button>
+    </div>
+  </div>
+  
+  <div class="star-field">
+    <div class="layer"></div>
+    <div class="layer"></div>
+    <div class="layer"></div>
+  </div>
+
+<script>
+  const display = document.getElementById("display");
+  const popup = document.getElementById("cute-popup");
+
+  function press(num) {
+    if (display.value.length < 6) {
+      display.value += num;
+    }
+  }
+
+  function clearInput() {
+    display.value = display.value.slice(0, -1);
+  }
+
+  function submit() {
+    if (display.value === "111923") {
+      startFireworks();
+      setTimeout(startLoadingSequence, 3000);
+    } else {
+      showPopup();
+      display.value = "";
+    }
+  }
+
+  function showPopup() {
+    popup.classList.remove("hidden");
+  }
+
+  function closePopup() {
+    popup.classList.add("hidden");
+  }
+
+  // Fireworks that explode into roses
+  function startFireworks() {
+    const canvas = document.getElementById('fireworks');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles = [];
+    const roses = ['🌹', '💖', '🌸', '💕', '✨'];
+
+    class Particle {
+      constructor(x, y, isRose = false) {
+        this.x = x;
+        this.y = y;
+        this.isRose = isRose;
+        this.char = roses[Math.floor(Math.random() * roses.length)];
+        this.vx = (Math.random() - 0.5) * 8;
+        this.vy = (Math.random() - 0.5) * 8;
+        this.life = 100;
+        this.size = isRose ? 20 : 3;
+        this.color = `hsl(${Math.random() * 60 + 320}, 100%, ${50 + Math.random() * 30}%)`;
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vy += 0.1;
+        this.life -= 1;
+      }
+
+      draw() {
+        if (this.isRose) {
+          ctx.font = `${this.size}px Arial`;
+          ctx.fillText(this.char, this.x, this.y);
+        } else {
+          ctx.fillStyle = this.color;
+          ctx.globalAlpha = this.life / 100;
+          ctx.fillRect(this.x, this.y, this.size, this.size);
+          ctx.globalAlpha = 1;
+        }
+      }
+    }
+
+    function createFirework() {
+      const x = Math.random() * canvas.width;
+      const y = Math.random() * canvas.height * 0.5;
+
+      // Burst particles
+      for (let i = 0; i < 30; i++) {
+        particles.push(new Particle(x, y));
+      }
+
+      // Rose emojis
+      for (let i = 0; i < 8; i++) {
+        particles.push(new Particle(x, y, true));
+      }
+    }
+
+    let frameCount = 0;
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      if (frameCount % 20 === 0 && frameCount < 300) {
+        createFirework();
+      }
+
+      for (let i = particles.length - 1; i >= 0; i--) {
+        particles[i].update();
+        particles[i].draw();
+        if (particles[i].life <= 0) {
+          particles.splice(i, 1);
+        }
+      }
+
+      frameCount++;
+      if (frameCount < 350) {
+        requestAnimationFrame(animate);
+      } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+
+    animate();
+  }
+
+  function startLoadingSequence() {
+    document.querySelector('.container').innerHTML = `    <div class="bg"></div>
+      <div style="width: 100%; max-width: 400px;">
+        <div style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 16px; padding: 24px; border: 1px solid rgba(255, 255, 255, 0.2);">
+          <div id="terminal" style="font-family: 'Courier New', monospace; font-size: 13px; color: #a3e635; text-align: left; min-height: 120px; margin-bottom: 20px;"></div>
+          <div style="background: rgba(0,0,0,0.3); border-radius: 8px; height: 24px; overflow: hidden; position: relative;">
+            <div id="progress-bar" style="height: 100%; background: linear-gradient(90deg, #ec4899, #a855f7); width: 0%; transition: width 0.3s;"></div>
+            <div id="progress-text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 12px; color: white; font-weight: bold;">0%</div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const terminal = document.getElementById('terminal');
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+    
+    const messages = [
+      'Initializing memory protocols...',
+      'Checking if heart still beats for user...',
+      '> Status: Still very much in love 💕',
+      'Scanning emotional database...',
+      '> Found: 𝟙𝟜𝟛 reasons why she matters',
+      'Verifying authenticity of feelings...',
+      '> Confirmed: These feelings are real ✨',
+      'Loading cherished moments...',
+      '> That one conversation... remembered.',
+      'Finalizing message delivery...'
+    ];
+
+    let progress = 0;
+    let messageIndex = 0;
+
+    const interval = setInterval(() => {
+      if (messageIndex < messages.length) {
+        terminal.innerHTML += messages[messageIndex] + '<br>';
+        terminal.scrollTop = terminal.scrollHeight;
+        messageIndex++;
+        progress += 10;
+        progressBar.style.width = progress + '%';
+        progressText.textContent = progress + '%';
+      } else {
+        clearInterval(interval);
+        setTimeout(showMessage, 5000);
+      }
+    }, 500);
+  }
+
+  function showMessage() {
+    document.querySelector('.container').innerHTML = `    <div class="bg"></div>
+      <div style="width: 110%; max-width: 600px; position: relative;">
+        <div style="background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(12px); border-radius: 20px; padding: 32px 24px; border: 1px solid rgba(255, 255, 255, 0.3); box-shadow: 0 8px 32px rgba(0,0,0,0.3);">
+          <h2 style="color: #fbbf24; margin-top: 0; font-size: 22px; text-align: center; margin-bottom: 24px;">To someone special 🌸</h2>
+          
+          <div class="card-slider">
+            <div class="cards-container" id="cardsContainer">
+              <div class="message-card active" data-index="0">
+                <div class="card-content">
+                  <span class="card-number">1/5</span>
+                  <p>You know... sometimes a person comes back into your life at just the right moment, 
+                  like finding a missing puzzle piece you didn't even know you needed. ✨</p>
+                </div>
+              </div>
+              
+              <div class="message-card" data-index="1">
+                <div class="card-content">
+                  <span class="card-number">2/5</span>
+                  <p>That little chat we had? It wasn't just words to me. It was like someone turned on a light 
+                  in a room I'd been sitting in the dark. You reminded me that maybe... just maybe... 
+                  I could be better. Not perfect, but better. 🌟</p>
+                </div>
+              </div>
+              
+              <div class="message-card" data-index="2">
+                <div class="card-content">
+                  <span class="card-number">3/5</span>
+                  <p>And the confidence thing? When I needed it most,
+                    you gave me strength I didn't know I could feel.
+                     Funny how someone believing in you can do that,
+                      huh? It made me want to show up — for you, yeah, 
+                      but also for the person I want to become. 💫</p>
+                </div>
+              </div>
+              
+              <div class="message-card" data-index="3">
+                <div class="card-content">
+                  <span class="card-number">4/5</span>
+                  <p>I still think about you more than I probably should. Miss you in that quiet way 
+                  where everything reminds me of what we had. But this isn't about holding on to the past... 
+                  it's about being grateful that you existed in my story at all.</p>
+                </div>
+              </div>
+              
+              <div class="message-card" data-index="4">
+                <div class="card-content">
+                  <span class="card-number">5/5</span>
+                  <p>So thank you. For everything you gave me, for seeing something in me I couldn't see myself. 
+                    Things aren't the same now, and that's okay... but you'll always matter to me. Always. 
+                    And if the universe is kind, maybe our paths will find each other again someday. 💫✨🌙</p>
+                  <p style="margin-top: 16px; font-size: 13px; opacity: 0.8;">
+                    — Someone who still believes in you (and maybe us, in some way) 💕
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="slider-controls">
+              <button class="slider-btn" id="prevBtn" onclick="prevCard()">⮜</button>
+              <div class="dots-container" id="dotsContainer"></div>
+              <button class="slider-btn" id="nextBtn" onclick="nextCard()">⮞</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    initializeSlider();
+    createFallingCats();
+  }
+
+  let currentCard = 0;
+  const totalCards = 5;
+
+  function initializeSlider() {
+    updateCards();
+    createDots();
+    // Ensure first dot is active on load
+    setTimeout(() => {
+      const firstDot = document.querySelector('.dot');
+      if (firstDot) {
+        firstDot.classList.add('active');
+      }
+    }, 0);
+  }
+
+  function updateCards() {
+    const cards = document.querySelectorAll('.message-card');
+    cards.forEach((card, index) => {
+      card.classList.remove('active', 'prev', 'next');
+      
+      if (index === currentCard) {
+        card.classList.add('active');
+      } else if (index < currentCard) {
+        card.classList.add('prev');
+      } else {
+        card.classList.add('next');
+      }
+    });
+    
+    updateDots();
+    updateButtons();
+  }
+
+  function createDots() {
+    const container = document.getElementById('dotsContainer');
+    for (let i = 0; i < totalCards; i++) {
+      const dot = document.createElement('span');
+      dot.className = 'dot';
+      dot.onclick = () => goToCard(i);
+      container.appendChild(dot);
+    }
+  }
+
+  function updateDots() {
+    const dots = document.querySelectorAll('.dot');
+    dots.forEach((dot, index) => {
+      dot.classList.toggle('active', index === currentCard);
+    });
+  }
+
+  function updateButtons() {
+    document.getElementById('prevBtn').disabled = currentCard === 0;
+    document.getElementById('nextBtn').disabled = currentCard === totalCards - 1;
+  }
+
+  function nextCard() {
+    if (currentCard < totalCards - 1) {
+      currentCard++;
+      updateCards();
+    }
+  }
+
+  function prevCard() {
+    if (currentCard > 0) {
+      currentCard--;
+      updateCards();
+    }
+  }
+
+  function goToCard(index) {
+    currentCard = index;
+    updateCards();
+  }
+
+  function createFallingCats() {
+    setInterval(() => {
+      const cat = document.createElement('img');
+      cat.src = '/gifs/kitty-kitty-heart.gif';
+      cat.style.position = 'fixed';
+      cat.style.width = '50px';
+      cat.style.left = Math.random() * 100 + '%';
+      cat.style.top = '-60px';
+      cat.style.opacity = '0.8';
+      cat.style.pointerEvents = 'none';
+      cat.style.zIndex = '9999';
+      cat.style.animation = `fall ${8 + Math.random() * 4}s linear`;
+      
+      document.body.appendChild(cat);
+      
+      setTimeout(() => cat.remove(), 15000);
+    }, 500);
+  }
+</script>
+
+</body>
+</html>
