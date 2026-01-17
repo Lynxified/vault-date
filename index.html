@@ -257,14 +257,14 @@
     .card-slider {
       position: relative;
       width: 100%;
-      min-height: 240px;
+      min-height: 320px;
     }
 
     .cards-container {
       position: relative;
       width: 100%;
       height: auto;
-      min-height: 240px;
+      min-height: 320px;
       perspective: 1000px;
     }
 
@@ -300,8 +300,8 @@
       background: linear-gradient(135deg, rgba(236, 72, 153, 0.3), rgba(168, 85, 247, 0.3));
       backdrop-filter: blur(10px);
       border-radius: 16px;
-      padding: 24px;
-      height: 100%;
+      padding: 20px 16px;
+      min-height: 280px;
       border: 2px solid rgba(255, 255, 255, 0.3);
       box-shadow: 0 8px 32px rgba(236, 72, 153, 0.3);
       display: flex;
@@ -427,11 +427,16 @@
       }
 
       .card-content {
-        padding: 20px 16px;
+        padding: 18px 14px;
+        min-height: 300px;
       }
 
       .cards-container {
-        min-height: 260px;
+        min-height: 340px;
+      }
+
+      .card-slider {
+        min-height: 340px;
       }
 
       .glow {
@@ -691,129 +696,4 @@
                   <div class="card-content">
                     <span class="card-number">4/5</span>
                     <p>I still think about you more than I probably should. Miss you in that quiet way 
-                    where everything reminds me of what we had. But this isn't about holding on to the past... 
-                    it's about being grateful that you existed in my story at all.</p>
-                  </div>
-                </div>
-                
-                <div class="message-card" data-index="4">
-                  <div class="card-content">
-                    <span class="card-number">5/5</span>
-                    <p>So thank you. For everything you gave me, for seeing something in me I couldn't see myself. 
-                      Things aren't the same now, and that's okay... but you'll always matter to me. Always. 
-                      And if the universe is kind, maybe our paths will find each other again someday. 💫✨🌙</p>
-                    <p style="margin-top: 16px; font-size: 13px; opacity: 0.8;">
-                      — Someone who still believes in you (and maybe us, in some way) 💕
-                    </p>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="slider-controls">
-                <button class="slider-btn" id="prevBtn" onclick="prevCard()">‹</button>
-                <div class="dots-container" id="dotsContainer"></div>
-                <button class="slider-btn" id="nextBtn" onclick="nextCard()">›</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
-
-      initializeSlider();
-      createFallingCats();
-    }
-
-    let currentCard = 0;
-    const totalCards = 5;
-
-    function initializeSlider() {
-      updateCards();
-      createDots();
-      setTimeout(() => {
-        const firstDot = document.querySelector('.dot');
-        if (firstDot) {
-          firstDot.classList.add('active');
-        }
-      }, 0);
-    }
-
-    function updateCards() {
-      const cards = document.querySelectorAll('.message-card');
-      cards.forEach((card, index) => {
-        card.classList.remove('active', 'prev', 'next');
-        
-        if (index === currentCard) {
-          card.classList.add('active');
-        } else if (index < currentCard) {
-          card.classList.add('prev');
-        } else {
-          card.classList.add('next');
-        }
-      });
-      
-      updateDots();
-      updateButtons();
-    }
-
-    function createDots() {
-      const container = document.getElementById('dotsContainer');
-      for (let i = 0; i < totalCards; i++) {
-        const dot = document.createElement('span');
-        dot.className = 'dot';
-        dot.onclick = () => goToCard(i);
-        container.appendChild(dot);
-      }
-    }
-
-    function updateDots() {
-      const dots = document.querySelectorAll('.dot');
-      dots.forEach((dot, index) => {
-        dot.classList.toggle('active', index === currentCard);
-      });
-    }
-
-    function updateButtons() {
-      document.getElementById('prevBtn').disabled = currentCard === 0;
-      document.getElementById('nextBtn').disabled = currentCard === totalCards - 1;
-    }
-
-    function nextCard() {
-      if (currentCard < totalCards - 1) {
-        currentCard++;
-        updateCards();
-      }
-    }
-
-    function prevCard() {
-      if (currentCard > 0) {
-        currentCard--;
-        updateCards();
-      }
-    }
-
-    function goToCard(index) {
-      currentCard = index;
-      updateCards();
-    }
-
-    function createFallingCats() {
-      setInterval(() => {
-        const cat = document.createElement('img');
-        cat.src = '/gifs/kitty-kitty-heart.gif';
-        cat.style.position = 'fixed';
-        cat.style.width = '40px';
-        cat.style.left = Math.random() * 100 + '%';
-        cat.style.top = '-60px';
-        cat.style.opacity = '0.5';
-        cat.style.pointerEvents = 'none';
-        cat.style.zIndex = '1';
-        cat.style.animation = `fall ${8 + Math.random() * 4}s linear`;
-        
-        document.body.appendChild(cat);
-        
-        setTimeout(() => cat.remove(), 15000);
-      }, 800);
-    }
-  </script>
-</body>
-</html>
+                    where everything reminds me of what we had. But t
